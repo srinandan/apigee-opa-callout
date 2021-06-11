@@ -8,6 +8,10 @@ OPA is a general purpose policy engine (aka Policy Decision Point). Apigee's gat
 
 Apigee provides a policy called External Callout, which invokes an gRPC server that implements OPA. OPA provides golang [integration](https://github.com/open-policy-agent/opa) which is exposed as a gRPC service. In most cases, OPA provided HTTP API service/server is sufficient. This repo is mostly to show Apigee's External Callout policy with an example.
 
+NOTE:
+
+* OPA supports gRPC via the Envoy ext_authz interface. This was not used because Apigee's External Callout uses an Apigee defined gRPC proto for communication. Apigee's gRPC proto allows the External Callout server to get access to the Apigee Message Context (and manipulate it).
+
 ## Example
 
 In this example, Apigee produces a JWT token that looks like:
@@ -47,6 +51,8 @@ allow {
 This rego allows certain developers (the Apigee entities) access to certain methods. Normally, I would use built-in policies to check such permissions, but for this example we will use OPA.
 
 The external callout service executes the input against the rule and sets a flow variable `opa-result` with the bool `true` or `false`
+
+![Apigee-OPA](./Apigee-OPA.png)
 
 ## Setup
 
